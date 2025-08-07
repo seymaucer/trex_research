@@ -384,28 +384,28 @@ public class KullaniciController : ControllerBase
 
    ## Katmanlı Mimari
    
-    [Kullanıcı / Tarayıcı]
-        │
-        ▼
-┌──────────────────────────────┐
-│     Presentation Katmanı     │
-│  (UI, Controller, Razor, API)│
-└──────────────────────────────┘
-        │ çağırır
-        ▼
-┌──────────────────────────────┐
-│     Business Katmanı         │
-│ (Kurallar, Servisler, Logic)│
-└──────────────────────────────┘
-        │ çağırır
-        ▼
-┌──────────────────────────────┐
-│    Data Access Katmanı       │
-│ (EF Core, SQL, Repository)   │
-└──────────────────────────────┘
-        │
-        ▼
-     [Veritabanı]
+       [Kullanıcı / Tarayıcı]
+             │
+             ▼
+  ┌──────────────────────────────┐
+  │     Presentation Katmanı     │
+  │  (UI, Controller, Razor, API)│
+  └──────────────────────────────┘
+            │ çağırır
+            ▼
+ ┌──────────────────────────────┐
+ │     Business Katmanı         │
+ │ (Kurallar, Servisler, Logic) │
+ └──────────────────────────────┘
+           │ çağırır
+           ▼
+ ┌──────────────────────────────┐
+ │    Data Access Katmanı       │
+ │ (EF Core, SQL, Repository)   │
+ └──────────────────────────────┘
+           │
+           ▼
+       [Veritabanı]
 
 ## Temiz Mimarı
 
@@ -666,9 +666,10 @@ Onun yerine kullanıcı özel bir hata sayfasına yönlendirilir.
   * _logger.LogError kısmı ise hatayı kayıt altına alır.
   * return view("Error") burda hata sayfası gösterilir böylece sistem çökmemiş olur.
 
-8. YAZILIM GELİŞTİRME PRENSİPLERİ
+ 
+ # YAZILIM GELİŞTİRME PRENSİPLERİ
 
-# SOLID Prensipleri
+## SOLID Prensipleri
 
 * Single Responsibility(tek sorumluluk)
   Bir sınıfın yalnızca tek işi olmalı.
@@ -718,7 +719,7 @@ public class EmailService : IMessageService {
           Başta interface neden var diyordum.Ama sonra fark ettim ki, bu yapı sayesinde e-posta mı gönderiyorum, SMS mi gönderiyorum diye kodu değiştirmeme gerek kalmıyor.Sistem sadece "mesaj gönder" diyor, nasıl gönderileceği detayını bilmiyor.
           Bu da yazılımı daha sağlam ve genişletilebilir yapıyor.
 
-# Design Patterns(Tasarım Kalıpları)
+## Design Patterns(Tasarım Kalıpları)
 * Singleton: Uygulama çalışırken tek bir tane nesne oluşturmak istediğimizde kullanılır.Yani sınıftan sadece 1 kez oluşturulabilir, herkes onu kullanır.
   Neden Kullanılır?
   Bellek tasarrufu sağlamak için.
@@ -731,14 +732,14 @@ public class EmailService : IMessageService {
   Veritabanı ile iş yapan sınıfları soyutlamak kolaylaşır.
   İş mantığı (business logic) ile veritabanı kodu birbirine karışmaz.
 
-# Clean Code(Temiz kod) Nedir?
+## Clean Code(Temiz kod) Nedir?
  Kolay okunan, sade, anlaşılır ve bakımı kolay koddur. Anlamlı isimler, kısa fonksiyonlar, yorum gerektirmeyen kod = Temiz koddur.
   Kötü Kod:
    if (x == 1) { Birşeyolsun(); }
   Temiz Kod:
    if (Kullanıcıgirişyaptıysa) { ShowDashboard(); }
 
-# Yazılım Mimari Desenleri
+## Yazılım Mimari Desenleri
 
 | Mimari                           | Kısaca Açıklama                             | Ne Zaman Kullanılır?                       |
 | -------------------------------- | ------------------------------------------- | ------------------------------------------ |
