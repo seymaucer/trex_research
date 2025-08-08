@@ -1,112 +1,89 @@
-# MODERN YAZILIM GELİŞTİRME PRATİKLERİ
+# 1.MODERN YAZILIM GELİŞTİRME PRATİKLERİ
 
 ## Git nedir? GitHub nedir?
   Git bir projedeki kod değişikliklerini takip etmek, farklı sürümleri yönetmek ve ekip çalışmasını kolaylaştırmak için kullanılan bir dağıtılmış versiyon kontrol sistemidir. Bu da kaynak kodun ve proje geçmişinin tam kopyasının her geliştiricinin bilgisayarında bulunduğu kontrol yöntemidir.
   Github ise Git depolarını barındıran bulut tabanlı bir platformdur.Açık kaynak projeler, ekip çalışması için kullanılır.
 
 ## Temel Git Komutları
-  Git init: Yeni bir Git deposu oluşturmaya yarar.
-  Git clone: Uzaktaki bir depoyu yereline kopyalar.
-  Git add: Dosyayı bunu kaydetmek istiyorum diyip stage(hazırlık alanına) eklenir.
-  Git commit:Yapılan değişiklikleri kaydeder.
-  Git push:Yaptığın commit'leri GitHub gibi bir uzak sunucuya gönderir.Böylece başkaları da senin değişikliklerini görebilir.Push işlemi,yerel değişiklikleri merkezi projeye aktarır.
-  Git pull:Başka bir uzak sunucudaki en güncel değişiklikleri kendi bilgisayarına çeker.Bir ekipte başkalarının yaptığı değişiklikleri almak için kullanılır.
-  Git branch:Projede farklı çalışma yolları oluşturmayı sağlar.Ana projeyi bozmadan ayrı bir kopya gibi çalışmayı sağlar.
-  Git merge:Farklı bir branch'te yaptığın değişiklikleri ana projeyle birleştirmek için kullanılır.
+- **Git init**: Bilgisayarımda yeni bir Git projesi başlatmak için kullanılıyor.
+- **Git clone**: İnternette bir yerde bulunan bir projeyi kendi bilgisayarıma indirip üzerinde çalışabilmemi sağlıyor.
+- **Git add**: Yaptığım değişiklikleri Git’e bildiriyorum. Bu komutla, dosyayı kaydedeceğim değişiklikler listesine eklemiş oluyorum.
+- **Git commit**: add komutuyla hazırladığım değişiklikleri gerçekten kaydediyorum. Sanki “bunu not al” der gibi.
+- **Git push**: Yaptığım bu kayıtları GitHub gibi bir uzak sunucuya yüklüyorum. Böylece başkaları da ne yaptığımı görebiliyor.
+- **Git pull**: Takımda başka biri projeyi değiştirdiyse, bu komutla onların yaptığı değişiklikleri kendi bilgisayarıma alabiliyorum.
+- **Git branch**: Aynı proje içinde farklı versiyonlar oluşturmamı sağlıyor. Ana projeyi bozmadan farklı şeyler deneyebiliyorum.
+- **Git merge**: Farklı yollarda (branch’lerde) yapılan işleri birleştiriyor. Mesela önce ayrı çalışıp sonra her şeyi bir araya getirmek gibi düşünebiliriz.
   
   ## Merge Conflict nedir, nasıl çözülür?
-  Aynı dosyada iki farklı branch'te yapılan değişiklikler Git tarafından otomatik birleştirilmezse merge conflict oluşur.
+  Projede aynı dosya üzerinde iki kişi farklı branch’lerde değişiklik yaparsa ve bu değişiklikler birleştirilmek istendiğinde arada çakışma olursa buna merge conflict deniyor. Git bunu otomatik olarak birleştiremiyor ve bize diyor ki: "Sen karar ver hangisi kalacak?"
+  
   Çözüm adımları ise şöyledir:
-   . Çakışan satırlar bu işaretlerle gösterilir: "<<<<<<< (head) ======= (main) >>>>>>> (yeni-özellik)" işaretler arasındaki kısımları düzenlenmeli.
+   . Çakışan satırlar bu işaretlerle gösterilir: "<<<<<<< (head) ======= (main) >>>>>>> (yeni-özellik)" Hangisi kalacak, hangisi silinecek ona ben karar veriyorum.
    . Daha sonra çakışmayı manuel olarak bizim düzenlememiz gerekir.
    . Git add ile çözümü staged'e eklenir.
-   . Git commit ile kaydedilip çakışmayı sonlandırırız.
+   . Git commit ile kaydedilip çakışmayı sonlandırıyoruz.
 
  ## CI/CD nedir? Azure DevOps, GitHub Actions ile pipeline örnekleri 
-   Yazdığımız kodun düzgün çalışıp çalışmadığını test etmek, sonra da bu kodu kullanıcıların kullanabileceği şekilde yayına almak gerekir.CI/CD ise bunu otomatik hale getirir.
-   .CI(Sürekli Entegrasyon): Gönderdiğimiz her kod GitHub tarafından otomatik test ediliyor.Böylece kodda hata varsa hemen öğrenmiş oluyoruz.
-   .CD(Sürekli Dağıtım):Eğer kodlarımız testi geçtiyse CD bu kodu otomatik olarak yayına hazır hale getiriliyor veya direkt yayına alınıyor.
+   Projeyi yazarken sadece kodu yazmak yetmiyor, çalışıyor mu çalışmıyor mu bunu test etmemiz gerekiyor. Sonra da her şey düzgünse, bu kodu yayına almak lazım. İşte CI/CD dediğimiz sistem bunu bizim yerimize otomatik yapıyor.
+   .CI(Sürekli Entegrasyon): Ben her kod gönderdiğimde (örneğin GitHub'a push yapınca), GitHub bunu otomatik test ediyor. Kodda hata varsa anında görüyorum. Böylece daha erken fark edip düzeltebiliyorum.
+   .CD(Sürekli Dağıtım): Eğer testler sorunsuz geçtiyse, bu sefer sistem kodu yayına hazır hale getiriyor, hatta bazen otomatik olarak yayına bile alıyor. Yani elle bir şey yapmamıza gerek kalmıyor.
+   
+ ###  GitHub actions ile .NET CI/CD 
+ 
+    yaml
 
-   GitHub actions ile .NET CI/CD 
-    Kodları GitHub’a gönderdiğimde, otomatik olarak build ve test işlemleri yapılmasını istedim. Bunun için aşağıdaki pipeline dosyasını yazdım:
-    Bu işlem her push sonrası otomatik çalışıyor ve projemi test edip hata varsa bana hata bildirimi geliyor.
+name:.NET Pipeline Örneği
 
-
-
-name: .NET Otomatik Build ve Test
-
-on:
-  push:
-    branches: [ main ]  # main dalına kod gönderilince çalışır
-
+on:[push]
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest  # Linux ortamında çalışır
-
-    steps:
-      - name: Kodu indir
-        uses: actions/checkout@v2
-
-      - name: .NET 8 kurulumu
-        uses: actions/setup-dotnet@v2
+derleme-ve-test:
+runs-on:windows-latest
+steps:
+name: Kodları İndir
+- uses: actions/checkout@v2
+- uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '8.0.x'
+  - run: dotnet build
+  - run: dotnet test
+          
+. Burada her push işlemi yapıldığında koda derleme ve test işlemi yapan pipeline örneğini yazdım.
+. Windows'ta çalışması için runs-on kısmını yazdım, steps kısmında adımları tek tek gösterdim ve .NET'in son sürümünde çalışması için de kod yazdım.
 
-      - name: Build işlemi
-        run: dotnet build --configuration Release
-
-      - name: Testleri çalıştır
-        run: dotnet test
-
-   Azure DevOps ile Pipeline Örneği
-    Bu işlem de her commit sonrası build ve test işlemi yapıyor ve hata yapmayı engelliyor.
-    # azure-pipelines.yml
-
-trigger:
-- main  # main dalına kod gönderilince çalışır
-
-pool:
-  vmImage: 'windows-latest'  # Windows ortamı kullanılıyor
-
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '8.0.x'
-
-- script: dotnet build --configuration Release
-  displayName: 'Projeyi Derle'
-
-- script: dotnet test
-  displayName: 'Testleri Çalıştır'
 
 
 ## Software Development Life Cycle(SDLC)
 
 ### Yazılım Geliştirme Sürecinin Aşamaları
    
-   .Planlama (Ne Yapacağız): Yazılıma başlamadan yol haritası çıkarılır.Müşteri ne istiyor?Ne kadar zamanda,kaç kişiyle proje yapılıcak? Gibi sorular sorulur.
-   .Analiz (Neye İhtiyacımız Var): İhtiyaçlar netleştirilir,iş bölümü yapılır.Hangi özellikler isteniyor?Hangi ekranlar,diller olacak?
-   .Tasarım (Nasıl Yapacağız): Projenin mimarisi belirlenir. Veritabanı yapısı, sayfa tasarımları gibi oluşturulur.Koddan önce şekil yani.
-   .Geliştirme (Kod Yazılır): Geliştiriciler kodu yazar, test eder. 
-   .Test (Her şey Düzgün Çalışıyor mu):Hatalar aranır, düzeltilir. Kod düzgün mü, doğru çalışıyor mu bakılır.
-   .Dağıtım (Proje Yayınlanır):Yazılım kullanıcıya sunulur.
-   .Bakım (Proje Sonrası Destek):Kullanıcıdan geri bildirim alınır.Yeni istekler varsa düzenlenir.
+-**Planlama (Ne Yapacağız)**: İşe başlamadan önce bir yol haritası çiziyoruz. Müşteri ne istiyor, ne kadar sürede bitmeli, kaç kişiyle yapacağız gibi soruları cevaplıyoruz. Yani kafamızda her şey netleşiyor.
+
+-**Analiz (Neye İhtiyacımız Var)**: Projede neye ihtiyacımız var, hangi özellikler olacak, hangi ekranlar kullanılacak, hangi dil/dillerle yazılacak gibi detayları konuşup netleştiriyoruz.
+
+-**Tasarım (Nasıl Yapacağız)**: Burada projenin mimarisini kuruyoruz. Veritabanı nasıl olacak, sayfalar nasıl görünecek gibi şeyleri belirliyoruz. Önce şekli çiziyoruz, sonra koda geçiyoruz gibi düşünebilirsiniz.
+
+-**Geliştirme (Kod Yazılır)**: Artık kod yazma kısmına geliyoruz. Geliştiriciler burada kodu yazıyor ve test ediyor.
+
+-**Test (Her şey Düzgün Çalışıyor mu)**: Kod düzgün çalışıyor mu, hata var mı diye kontrol ediyoruz. Hataları düzeltip sistemin sorunsuz çalıştığından emin oluyoruz.
+
+-**Dağıtım (Proje Yayınlanır)**: Her şey hazırsa, yazılım kullanıcıya sunuluyor.
+
+-**Bakım (Proje Sonrası Destek)**: Kullanıcıdan geri bildirim alıyoruz. Yeni istekler varsa onları da ekliyoruz, varsa hataları düzeltiyoruz.
 
 ### Agile/Scrum/Kanban Metodolojileri
 
-    Agile:Esnek, hızlı ve geri bildirim odaklı çalışma yöntemidir.Büyük projeler yerine küçük işler yapılır.Bir hocam bu sisteme xanax nedeni demişti.Çalışanlar her aşamada müsteriyle iletişimde onlara göre şekil almak zorundalar diye.
-    Scrum:Belirli zaman aralıklarıyla (sprint)çalışılır.Günlük toplantılar yapılır.
-    Kanban:İşler kart şeklinde tahtaya yazılır. Yapılacaklar,Yapılıyor,Bitti gibi.Sürekli bir akış vardır süre kısıtlaması yoktur sprint gibi.
+    Agile: Agile dediğimiz şey aslında daha esnek ve hızlı bir çalışma yöntemi. Büyük projeler yerine küçük küçük işler yapılıyor. Bir hocamız şöyle demişti: "Bu sistemde her adımda müşteriye gösterip onay almak zorundasınız." Yani sürekli iletişim hâlindeyiz.
+    Scrum: Scrum'da işler belirli zaman dilimlerine (sprint) bölünüyor. Günlük mini toplantılarla herkes ne yaptığını anlatıyor. Çok düzenli bir sistem.
+    Kanban: Burada işler kart şeklinde yazılıyor. Yapılacaklar, Yapılıyor, Bitti gibi bölümler oluyor. Sürekli bir akış var. Sprint gibi zaman baskısı yok.
 
 
-# .NET EKOSİSTEMİ
+# 2. .NET EKOSİSTEMİ
 
-     -.NET nedir? Tarihçesi,amacı,neden kullanılır?
+   ## .NET nedir? Tarihçesi,amacı,neden kullanılır?
      
-      .NET ekosistemiyle ilk tanıştığımda sadece "C# ile yazılım geliştirme aracı" olduğunu sanıyordum. Ancak araştırdıkça fark ettim ki .NET, sadece C# değil; web uygulamaları, API servisleri, mobil ve masaüstü uygulamalar gibi
-      çok farklı yazılımlar geliştirmeye imkan sağlayan güçlü ve çok yönlü bir platformmuş..NET, Microsoft tarafından geliştirilen **açık kaynaklı ve platformlar arası** (cross-platform) bir yazılım geliştirme platformudur.  
-      C#, F# ve VB.NET gibi dilleri destekler. Bu platform sayesinde;
+      .NET’i ilk duyduğumda sadece "C# ile yazılım geliştirme aracı" sanmıştım. Ama araştırınca fark ettim ki .NET aslında çok daha fazlasıymış. Sadece C# değil; web siteleri, API servisleri, mobil ve masaüstü uygulamalar gibi bir sürü farklı yazılımı yapmaya imkân tanıyan, güçlü ve esnek bir platformmuş..NET, Microsoft’un geliştirdiği açık kaynaklı ve farklı platformlarda çalışabilen (yani cross-platform) bir yazılım geliştirme ortamıymış. C#, F# ve VB.NET gibi dilleri destekliyor.
+      
+      Bu platform sayesinde;
       - Web uygulamaları (ASP.NET)
       - Masaüstü uygulamaları (Windows Forms, WPF)
       - Mobil uygulamalar (Xamarin / MAUI)
@@ -115,12 +92,12 @@ steps:
        gibi birçok yazılım geliştirilebilir.
        
        Peki neden tercih ediliyor?
-       -Güçlü dil desteği
-       -Visual Studio ve Rider gibi gelişmiş IDE'lerle uyumlu
-       -Yüksek performanslı web ve API geliştirme şansı
-       -Microsoft desteği
+       - Dil desteği gerçekten çok güçlü.
+       - Visual Studio veya Rider gibi güçlü editörlerle uyumlu çalışıyor.
+       - Web ve API projelerinde performansı baya iyi.
+       - Bir de arkasında Microsoft olunca güven veriyor açıkçası.
 
-      - .NET Framework, .NET Core ve .NET 7/8 farkları
+## .NET Framework, .NET Core ve .NET 7/8 farkları
       
 | Özellik             | .NET Framework     | .NET Core         | .NET 5+ / 6 / 7 / 8    |
 |---------------------|--------------------|-------------------|------------------------|
@@ -129,9 +106,10 @@ steps:
 | Açık Kaynak         | Hayır              | Evet              | Evet                   |
 | Kullanım Durumu     | Eski projelerde    | Aktif             | En güncel yapı         |
 
-    -dotnet --info çıktısı örneği ve yorumlama
-    Bilgisyarımdaki .Net ortamını kontrol etmek için terminale bu kodu yazdım ve şu çıktıyı aldım:
 
+ ## dotnet --info çıktısı örneği ve yorumlama
+  Bilgisyarımdaki .Net ortamını kontrol etmek için terminale bu kodu yazdım ve şu çıktıyı aldım:
+  
  PS C:\Users\seyma> dotnet --info
 .NET SDK:
  Version:   7.0.403
@@ -148,74 +126,109 @@ Host:
   Version:      7.0.13
   Architecture: x64
   Commit:       3f73a2f186
+  
 
  ## SENKRON VE ASENKRON PROGRAMLAMA
 
-  Her işlem sırayla yapılır bir iş bitmeden diğerine geçilemez.Basit uygulamalarda kullanılır.
+  **Senkronda** Her işlem sırayla yapılır bir iş bitmeden diğerine geçilemez.Basit uygulamalarda kullanılır.
  
- public string GetUser()
-{
+public string KullaniciGetir()
+
+   {
     Thread.Sleep(3000);  
-    return "Kullanıcı bilgisi";
-}
-*kullanıcı bilgileri alınırken 3 saniye bekletir.Bekleme bitene kadar işlem yapılmaz.
+    return "Kullanıcı bilgisi"; 
+   }
 
-Asenkron da ise tam tersi beklerken başka işlerde yapılabilir.Web API, veri çekme işlemleri yapılır.
+  *kullanıcı bilgileri alınırken 3 saniye bekletir.Bekleme bitene kadar işlem yapılmaz.
 
-public async Task<string> GetUserAsync()
-{
+**Asenkron** da ise tam tersi beklerken başka işlerde yapılabilir.Web API, veri çekme işlemleri yapılır.
+
+public async Task<string> KullaniciGetirAsync()
+
+  {
     await Task.Delay(3000); 
-    return "Kullanıcı bilgisi";
-}
-*bekleme olurken programın diğer işleri devam eder.Kullanıcı deneyimi çok daha yüksektir.
+    return "Kullanıcı bilgisi";  
+  }
+  
+    *bekleme olurken programın diğer işleri devam eder.Kullanıcı deneyimi çok daha yüksektir.
 
-  -async:Bir metodun asenkron çalışacağını belirtir.
-  -await:Asenkron bir işlemin sonucunu beklememizi sağlar.
-  -task:Asenkron işlemi temsil eden veri türüdür.
-  -configureAwait:UI veya context'e bağlı olmadan işlem yapmayı sağlar.
+**anahtar kavramlar**
+  - Async: Bir metodun asenkron çalışacağını söylüyoruz. Yani işlemi başlatıyoruz ama beklemiyoruz.
+  - Await: Asenkron işin sonucunu beklememizi sağlıyor. Yani "bu bitsin, sonra devam et" gibi düşünebilirsin.
+  - Task: Asenkron işlemin temsilcisi gibi. Bir tür veri tipi yani.
+  - ConfigureAwait: UI’ya ya da bulunduğun ortama bağlı olmadan çalışması için kullanılıyor. Özellikle mobil veya arka plan işleri için önemli oluyormuş.
   
  ## C# Arrow Function
   Bu ifade lambda fonksiyonu olarak geçer. Derste hocamız kodları kısaltmak daha hızlı kısa kod olarak açıklamıştı lambda fonksiyonu.
   
   List<int> sayilar = new List<int> { 1, 2, 3, 4, 5 };
   var çiftSayilar = sayilar.Where(sayi => sayi % 2 == 0).ToList();
-   *sayı çift mi? diye sorgulayan kısa bir fonksiyon var burda da.
+  
+    *sayı çift mi? diye sorgulayan kısa bir fonksiyon var burda da.
 
-#BACKEND GELİŞTİRME TEMELLERİ
+# 3. BACKEND GELİŞTİRME TEMELLERİ
 
-  -Backend Nedir?Frontend ile Farkları
+ ## -Backend Nedir?Frontend ile Farkları
 
-   *Backend:Uygulamanın kullanıcı tarafından görülmeyen tarafıdır.Veritabanı, API'ler,işin matematiği burda yer alır.
-   *Frontend:Kullanıcının gördüğü kısımdır.Web sitesi tasarımı,butonlar,menüler buradadır.
+   *Backend: Uygulamanın kullanıcı tarafından görünmeyen kısmı. Veritabanı, API'ler, hesaplamalar yani arka planda dönen bütün olaylar burada dönüyor.
+   *Frontend: Kullanıcının ekranda gördüğü kısım. Web sitesinin tasarımı, butonlar, menüler falan hep burada.
    
 ## Web Sunucusu Nedir?API Nedir?API Türleri
 
-   Web sunucusu: internetten gelen istekleri alıp doğru cevapları dönen bir yazılımdır.Örneğin bir kullanıcı web sitesini açtığında, web sunucusu o sayfayı kullanıcının tarayıcısına gönderir.
-   API:Yani yazılımların birbiriyle konuşmasını sağlayan arayüzdür.Yani bir yazılım başka bir sistemin sunduğu bilgiyi veya işlevi kullanmak istediğinde API üzerinden veri alılverişi yapar.
-    *API Türleri:
-     . Rest API: HTTP üzerinden çalışır. Get,Post gibi metodlarla veri alıp gönderir.JSON kullanılır.En yaygın kullanılan API türüdür.
-     . Soap API: XML tabanlıdır.Veri taşımak için daha katı kurallara sahiptir.Bankacılık sistemlerinde hala kullanılır.
-     . GraphQL API: İstemci sadece ihtiyacı olan alanları ister. Çok verili sorgularda kullanılır.
-     . gRPC: Google tarafından geliştirilmiştir.Binary veri taşır. Hız ve performans ön planda.
+ -**Web sunucusu**: Web sunucusu dediğimiz şey, internette kullanıcıdan gelen isteklere cevap veren yazılım. Mesela bir kullanıcı web sitesini açınca, aslında web sunucusu o sayfayı alıp tarayıcıya gönderiyor.
+-**API**: API'yi de şöyle düşünebiliriz: iki farklı yazılımın birbiriyle konuşmasını sağlayan aracı. Yani bir program başka bir sistemden veri çekmek veya işlem yaptırmak istiyorsa, bunu API üzerinden yapıyor.
+
+  -API Türleri:
+  
+     . Rest API: En çok kullanılan API türü. HTTP üzerinden çalışıyor. Get, Post gibi metotlarla veri gönderip alıyoruz. JSON formatında çalışıyor genelde.
+     . Soap API: XML tabanlı. Veri taşımak için ama biraz daha kurallı ve katı. Özellikle bankacılık sistemlerinde hâlâ kullanılıyormuş.
+     . GraphQL API: Sadece ihtiyaç olan veriyi çekmeye yarıyor. Çok fazla veriyle uğraşırken işe yarıyor çünkü fazlalık çekmiyorsun.
+     . gRPC: Google geliştirmiş. Binary veri taşıyor. Yani performans ve hız açısından çok iyi.
+
 
 ## HTTP Nedir? HTTP Metodları
-   HTTP, istemci ile sunucu arasında veri alışverişini sağlayan protoldür.Bir tarayıcı veya API, sunucuya HTTP metodu ile istek gönderir ve cevap alır.
+  HTTP, tarayıcıyla sunucu arasında veri alışverişini sağlayan bir iletişim dili gibi düşünebiliriz. API’lerle çalışırken sık sık HTTP metotlarını kullanıyoruz.
 
-     *Metodlar
-      .Get:Veri almak için kullanılır.(GET/api/urunler (tüm ürünleri getirir))
-      .Post:Yeni veri eklemek için.(POST/api/urunler (yeni bir ürün ekler))
-      .Put:Var olan veriyi tamamen güncellemek için kullanılır.(PUT/api/urunler/5 (ID'si 5 olan ürünü günceller))
-      .Delete:Veri silmek için kullanılır.(DELETE/api/urunler/5 (ID'si 5 olan ürünü siler))
-      
- POST örneği
-Content-Type: application/json
-
-{
-  "ad": "Kahve Makinesi",
-  "fiyat": 899.90,
-  "stok": 12
-} 
+- **Metodlar**
   
+  .Get:Veri almak için kullanılır.
+  
+[HttpGet]
+public List<Ogrenci> TumOgrencileriGetir()
+{
+    return ogrenciServisi.HepsiniGetir();
+}
+
+  .Post:Yeni veri eklemek için.
+
+  [HttpPost]
+public IActionResult YeniOgrenciEkle([FromBody] Ogrenci yeniOgrenci)
+{
+    ogrenciServisi.Ekle(yeniOgrenci);
+    return Ok();
+}
+
+
+  .Put:Var olan veriyi tamamen güncellemek için kullanılır.
+
+[HttpPut("{id}")]
+public IActionResult Guncelle(int id, [FromBody] Ogrenci guncelOgrenci)
+{
+    ogrenciServisi.Guncelle(id, guncelOgrenci);
+    return Ok();
+}
+
+
+  .Delete:Veri silmek için kullanılır.
+      
+[HttpDelete("{id}")]
+public IActionResult Sil(int id)
+{
+    ogrenciServisi.Sil(id);
+    return Ok();
+}
+
+ 
 
 ## RESTful Servislerin Çalışma Mantığı
    Basit ve URL tabanlı bir API mimarisidir.Amacı her şeyi basit, standart ve okunabilir yapmak.
@@ -223,7 +236,7 @@ Content-Type: application/json
    GET,POST,PUT,DELETE gibi HTTP metodları kullanılır.
    JSON formatı ile veri alışverişi yapılır.
 
- -REST vs SOAP vs GraphQL
+ ## -REST vs SOAP vs GraphQL
  
 | Özellik      | REST                     | SOAP             | GraphQL                 |
 | ------------ | ------------------------ | ---------------- | ----------------------- |
@@ -233,32 +246,44 @@ Content-Type: application/json
 | Öğrenme      | Kolay                    | Zor              | Orta                    |
 | Kullanım     | Güncel sistemlerde sıkça | Eski sistemlerde | Yeni projelerde popüler |
 
-## JSON Veri Formatı ve Kullanım Amacı
 
-   Veri taşıma ve saklama şeklidir.Önceden xml kullanılıyodu şimdi json.
-   Kullanım Amaçları:
-    *API'ler üzerinden veri gönderip almak
-    *Veritabanı ile haberleşmek
-    *Hızlı ve sadec veri formatı vermek
+## JSON Veri Formatı ve Kullanım Amacı
+JSON, veriyi taşımak ve saklamak için kullanılan bir formattır. Eskiden XML kullanılıyormuş ama artık çoğu sistem JSON kullanıyor.
+
+ -  Kullanım Amaçları:
+   
+    * API’lerle veri gönderip almak çok kolay oluyor.
+    * Veritabanıyla iletişim kurmak için kullanılıyor.
+    * Hızlı ve sade bir format, fazla detayla uğraştırmıyor.
     
-   Örnek JSON:
-GET /api/kullanici/1
+**Örnek JSON**:
+ Kullanıcı giriş yaparken bu bilgileri girer ve bu bilgiler API'ye gönderilir.Gönderilen JSON ise budur:
+
+   {
+  "email": "aylin@gmail.com",
+  "sifre": "Aylin1234!"
+}
+
+ Sunucu json'u alır ve düşünür böyle bir kullanıcı var mı şifresi doğru mu diye.Eğer doğruysa şu şeklde bir JSON ile cevap gönderilir:
 
 {
-  "id": 1,
-  "ad": "Ayşe",
-  "email": "ayse@gmail.com",
-  "aktif": true
+  "mesaj": "Giriş başarılı",
+  "kullaniciAdi": "Aylin",
+  "token": "ab123abc456xyz789",  
+  "sonGiris": "2025-08-08"
 }
-*API den JSON ile kullanıcı verisi çekiyoruz.
+
+  **Ayrıca sunucu giriş başarılı olduğunda kullanıcıya özel bir token verir.Dijital anahtar,id gibi düşünebiliriz aslında.Yani token saklanır ve tekrar giriş yapmana gerek kalmaz çünkü o id ile seni tanır.
+  
 
 # ASP.NET
 
 ## ASP.NET ve ASP.NET core nedir?Avantajları Farkları 
-  ASP.NET:Microsoft tarafından geliştirilen web uygulamaları yazmak için kullanılan bir framework’tür. Sadece Windows’ta çalışır.
-  ASP.NET Core:  modern, hızlı, açık kaynak ve platformlar arası (Windows, Linux, macOS) çalışan yeni nesil versiyonudur.
 
-  - ASP.NET Core'un Avantajları:
+  ASP.NET: Microsoft’un geliştirdiği bir framework yani yazılım iskeleti gibi düşünebiliriz. Web uygulamaları yapmamızı sağlıyor ama klasik ASP.NET sadece Windows ortamında çalışıyor.
+  ASP.NET Core: Sonra Microsoft, Hadi biz bunu daha hızlı, açık kaynak ve her platformda çalışabilir hale getirelim demiş ve böylece ortaya ASP.NET Core üretilmiş.
+
+- **ASP.NET Core'un Avantajları**:
   .Daha hızlı ve performanslı
   .Cross-platform (Windows’a bağımlı değil)
   .Açık kaynak
@@ -266,146 +291,185 @@ GET /api/kullanici/1
 
 ## MVC Nedir? Ne için Kullanılır?
  ASP.NET projelerinde sık kullanılan bir tasarım desenidir.Açılımı Model-View-Controller'dir.
- Model:Veriyi temsil eder.
- View:Kullanıcıya gösterilen sayfa.
- Controller:Kullanıcıdan gelen istekleri alır, modeli kullanır,view'a gönderir.
-  Bu yapı sayesinde kodlar düzenli olur, her şey ayrı ayrı kontrol edilir.
+ 
+ Model: Verileri temsil eden kısım. (Yani "bu ürün nedir", "kullanıcının adı ne" gibi bilgiler burada tutuluyor.)
+ 
+ View: Kullanıcının gördüğü sayfa.Yani tasarım kısmı
+ 
+ Controller: Kullanıcıdan gelen istekleri alır, işin mantığını yönetir, View’a gönderir.
+
+ Bu üçlü yapı sayesinde her şey düzenli duruyor. Kodlar karışmıyor çünkü herkes kendi işini yapıyor. Hem yazmak hem bakım yapmak çok daha kolay oluyor.
 
 ## Middleware Nedir?Nasıl Çalışır?
- ASP.NET Core uygulamasında gelen istek (request) ile cevabın (response) arasına giren yazılım parçalarıdır.
- Örneğin:Kimlik doğrulama,hata yönetimi,giriş yapılması.
+ Middleware dediğimiz şey, bir istek (request) geldiğinde ve cevabı (response) dönmeden araya giren küçük yazılım parçacıkları.
+
+Yani kullanıcı bir sayfaya gitmek istediğinde bu istek, sunucuya ulaşmadan önce bu middleware’lerden geçiyor. Sanki kapılardan geçer gibi. Her kapıda bir görevli var, bakıyor:
+“Giriş yaptı mı?”, “Yetkisi var mı?”, “Log tutayım mı?”, “Bir sorun var mı?” gibi.
+
  
-   Middleware sıralaması(Program.cs içinde)
+### Middleware sıralaması(Program.cs içinde)
    
-   var builder = WebApplication.CreateBuilder(args);
-   app.UseRouting();          1. Rotalama yapılır (hangi URL'ye gidileceği)
-   app.UseAuthentication();   2. Kimlik doğrulama yapılır (kullanıcı giriş yapmış mı?)
-   app.UseAuthorization();    3. Yetkilendirme yapılır (bu kullanıcı bu sayfaya erişebilir mi?)
-   app.UseEndpoints(endpoints =>
-   {
-      endpoints.MapControllers();  4. Uygun Controller çalıştırılır
-    });
-    Bunların sıralaması önemli 
+  **İlk önce anlamak için yapay zekaya gerçek hayat örneği vermesini istedim. Ve bana bir kafeye gitmek gibi olduğunu söyledi ve çok açıklayıcı oldu bana.Örneğin;
+  
+ - Girişte güvenlik var → Hata var mı?
+ - Maskeni taktın mı, ateşin ölçüldü mü? → HTTPS + güvenlik kontrolü
+ - Menüye göz atıyorsun → Statik dosyalar
+ - Garson geldi "Ne alırsınız?" dedi → Routing
+ - "Rezervasyonun var mı?" → Authentication
+ - "VIP bölüm mü? Normal mi?" → Authorization
+ - Sipariş geldi → Controller çalıştı
 
+**Program.cs içinde middleware örneği**
+
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+   app.UseExceptionHandler("/Home/Error");  (Mesela sistem patladı diyelim. Kodu yazan geliştirici bir yerde hata yaptı. İşte kullanıcıya siyah ekran vermeyelim diye onu şık bir Bir sorun oluştu sayfasına yönlendiriyoruz.)
+   
+   app.UseHttpsRedirection();   (HTTP güvensiz olabilir o yüzden HTTPS 'ye çeviriyoruz.)
+   
+   app.UseStaticFiles();     (Web sitesinde logo, stil dosyaları (CSS) veya animasyonlar varsa, bu satır sayesinde kullanıcı bunları görebiliyor.)
+   
+   app.UseRouting();         (Bu satır kullanıcı URL’de ne yazdıysa onu anlayayım kısmı. Mesela /hakkimizda direkt hakkımızda kısmına yönlendiriyor demek oluyor.)
+   
+   app.UseAuthentication();   (Bu satır kullanıcı sisteme giriş yapmış mı onu kontrol ediyor. Yani kullanıcı giriş yaptı mı?Yaptıysa gerçekten o mu?)
+   
+   app.UseAuthorization();     (Kullanıcı giriş yapmış olabilir ama her yere giremez Mesela admin sayfası sadece admin'lere açık olur. Bu satır da Bu kişinin yetkisi var mı? diye bakıyor.)
+   
+   app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");  (En sonunda artık her şey hazır. Kullanıcının istediği sayfa çalıştırılıyor. Mesela anasayfa mı istiyor O zaman HomeController içindeki Index çalışıyor.)
+
+app.Run();   (Uygulama çalışıyor.)
+
+   
 ## Dependency Injection(DI) nedir? neden önemlidir?
-   Bir sınıfın ihtiyacı olan başka sınıfları kendi içinde oluşturmak yerine dışarıdan almasıdır.Diyelim ki bir kahve makinesine süt ve kahve gerekiyo makine kendi alıyosa sıkıntı ama biri gelip koyuyosa bu dependency ınjection oluyor.Çünkü makine sadece kahveyi yapar.Bu sayede;
-   DI Örnek:
+   Bir sınıfın ihtiyacı olan başka sınıfları kendi içinde oluşturmak yerine dışarıdan almasıdır.Diyelim ki bir kahve makinesine süt ve kahve gerekiyo makine kendi alıyosa sıkıntı ama biri gelip koyuyosa bu dependency ınjection oluyor.Çünkü makine sadece kahveyi yapar.
    
-  -Interface tanımı(kim bu interface'i kullanıyorsa, mutlaka GetKullanici() fonksiyonunu yazmalı)
-   
-   public interface KullaniciService
-{
-    string GetKullanici();
-}
+  **DI Örnek**:
 
-  - Servis Sınıfı(Bu sınıf,KullanıcıService'i uyguluyor.GetKullanici() fonksiyonu da şeyme üçer yazısını döndürüyor.)
-   
-   public class KullaniciService : KullaniciService
+- Burada sadece bir iş yapılıyor o da mesajı hazırlamak.
+  
+public class SelamServisi
 {
-    public string GetKullanici()
+    public string MesajHazirla()
     {
-        return "Şeyma Üçer";
+        return "Merhaba, iyi günler!";
     }
 }
-   
-    -Program.cs'de servis kaydı(Bu DI temelidir)
-    
-    builder.Services.AddScoped<KullaniciService, KullaniciService>();
 
-    -Controller'da kullanımı
-    
-    [ApiController]
-[Route("api/[controller]")]
-public class KullaniciController : ControllerBase
+  -Selamci sınıfı mesajı hazırlamıyor sadece dışardan aldığı Selamservisi sınıfını kullanıyor.Yani selamci sadece mesajı nasıl göndericeğini biliyor mesajın içeriği hakkında bilgisi yok.Yani kendi işine odaklanıyor,bağımlı değil DI'da burda devreye giriyor.
+  
+public class Selamci
 {
-    private readonly IKullaniciService _kullaniciService;
+    private SelamServisi _servis; 
 
-    public KullaniciController(IKullaniciService kullaniciService)
+    public Selamci(SelamServisi servis)
     {
-        _kullaniciService = kullaniciService;
+        _servis = servis;
     }
 
-    [HttpGet]
-    public IActionResult Get()
+    public void SelamVer()
     {
-        var ad = _kullaniciService.GetKullanici();
-        return Ok(ad);
+        string mesaj = _servis.MesajHazirla(); 
+        Console.WriteLine(mesaj);
     }
 }
- *Bunun çıktısı "Şeyma Üçer".
 
+-Burada ilk olarak bir SelamServisi nesnesi oluşturuyoruz.Sonra bunu Selamci sınıfına constructer ile veriyoruz(new metodu ile).En son SelamVer() metodunu çağırıp mesajı basmış oluyoruz.
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        SelamServisi servis = new SelamServisi(); 
+        Selamci selamci = new Selamci(servis);   
+
+        selamci.SelamVer(); 
+    }
+}
+
+   
+ 
  ## Katmanlı Mimari
   Katmanlı mimari,bir uygulamayı görevlerine göre katmanlara ayırarak yazmamızı sağlar.Kodlar daha düzenli olur,her katman sadece kendi işiyle ilgilenir,test etmek ve bakım kolay olur böylece.
   
   ### Temel 3 Katman 
   
-  **Presentation Katmanı(Sunum)
-   -Kullanıcının gördüğü yer.
-   -Web sayfası,butonlar.
+  **Presentation Katmanı**(Sunum)
+   - Kullanıcının gördüğü yer.
+   - Web sayfası,butonlar.
    
-  **Business Katmanı(İş kuralları)
+  **Business Katmanı**(İş kuralları)
    -Uygulamanın mantığını,hesaplamalarını,kurallarını içerir.
    -Eğer stok 0 ise ürün satılamaz gibi bir kural varsa burda kontrol edilir.
 
-   **Data Access Katmanı(Veri erişim)
+   **Data Access Katmanı**(Veri erişim)
    -Veri tabanına veri ekleme, silme, güncelleme işini yapar.
    -SQL yazılmaz,entity framework gibi orm(nesne-ilişki eşleme) araçları kullanılır.
    
- ## Service & Repository Pattern
-    Service: Business katmanında iş yapan sınıftır. (Kural koyar)
-    Repository: Data Access katmanında veriye erişen sınıftır. (Veri alır/verir)
-    Avantajı: Kodlar daha test edilebilir, katmanlar ayrılmış olur.
+   
+ **Service & Repository Pattern**
+   - Service: Business katmanında iş yapan sınıftır. (Kural koyar)
+   - Repository: Data Access katmanında veriye erişen sınıftır. (Veri alır/verir)
+   - Avantajı: Kodlar daha test edilebilir, katmanlar ayrılmış olur.
    
    ## Temiz Mimari
-   Clean Architecture, daha profesyonel ve sürdürülebilir bir mimaridir.
+    Bu mimari, yazılım dünyasında biraz daha profesyonel bir yapı. Katmanlar daha detaylı ve iç içe geçmez.
 
    ### Katmanlar:
 
-   **Domain Katmanı
+   **Domain Katmanı**
    -Uygulamanın çekirdeği.
    -kurallar,sınıflar,arabirimler burada.
+   -Bu katman hiçbir şeye bağımlı değil. En saf, en sade hali
 
-   **Application Katmanı
+   **Application Katmanı**
    -Kullanıcı ne istiyor, nasıl yapacağız?
    -Use Case’leri (iş akışları) burada yazılır.
 
-   **Infrastructure Katmanı
+   **Infrastructure Katmanı**
    -Veritabanı, e-posta gönderimi, dosya işlemleri gibi altyapı işleri burada.
 
-   **API Katmanı
+   **API Katmanı**
    -Kullanıcının istek gönderdiği yerdir.
    -ASP.NET Core API Controller’lar burada yer alır.
 
   ## Bağımlılıkların Dışa Akması
     İçteki katmanlar, dıştaki katmanlara bağımlı olmaz.
-    Domain Infrastructure'i bilmez ama
-    Infrastructure Domain'i tanır.
+    Domain Infrastructure'i bilmez ama Infrastructure Domain'i tanır.
+    Çünkü iş mantığı her şeyden önemlidir. Veritabanı değişebilir, e-mail servisi değişebilir ama kural değişmez.
 
 
    ## Katmanlı Mimari
-   
-       [Kullanıcı / Tarayıcı]
-             │
-             ▼
-  ┌──────────────────────────────┐
-  │     Presentation Katmanı     │
-  │  (UI, Controller, Razor, API)│
-  └──────────────────────────────┘
-            │ çağırır
-            ▼
- ┌──────────────────────────────┐
- │     Business Katmanı         │
- │ (Kurallar, Servisler, Logic) │
- └──────────────────────────────┘
-           │ çağırır
-           ▼
- ┌──────────────────────────────┐
- │    Data Access Katmanı       │
- │ (EF Core, SQL, Repository)   │
- └──────────────────────────────┘
-           │
-           ▼
-       [Veritabanı]
+
+
+         [Kullanıcı / Tarayıcı]
+                   │
+                   ▼
+    ┌────────────────────────────────────┐
+    │        Presentation Katmanı        │
+    │   (Kullanıcının gördüğü yer)       │
+    │   → UI, Controller, Razor, API     │
+    └────────────────────────────────────┘
+                   │ çağırır
+                   ▼
+    ┌────────────────────────────────────┐
+    │          Business Katmanı          │
+    │  (İş mantığı, servisler, kurallar) │
+    │  → Validasyonlar, hesaplamalar     │
+    └────────────────────────────────────┘
+                   │ çağırır
+                   ▼
+    ┌────────────────────────────────────┐
+    │        Data Access Katmanı         │
+    │ (Veritabanına erişim kısmı)        │
+    │ → EF Core, SQL, Repository         │
+    └────────────────────────────────────┘
+                   │ erişir
+                   ▼
+             [Veritabanı]
+
+
 
 ## Temiz Mimarı
 
@@ -434,8 +498,9 @@ public class KullaniciController : ControllerBase
     │     Infrastructure Katmanı   │
     │ (EF Core, Email, File Ops)   │
     └──────────────────────────────┘
+    
 
-# VERİTABANI VE ORM
+# 5. VERİTABANI VE ORM
     SQL, ilişkisel veritabanıyla iletişim kurmak için kullanılan dildir.Veri silmeye,güncellemeye,silmeye yarar.
 
 ## İlişkisel vs İlişkisel Olmayan Veritabanları
