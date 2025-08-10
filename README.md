@@ -30,8 +30,6 @@
    
  ###  GitHub actions ile .NET CI/CD 
  
-    yaml
-
 name:.NET Pipeline Örneği
 
 on:[push]
@@ -46,7 +44,8 @@ name: Kodları İndir
           dotnet-version: '8.0.x'
   - run: dotnet build
   - run: dotnet test
-          
+
+
 . Burada her push işlemi yapıldığında koda derleme ve test işlemi yapan pipeline örneğini yazdım.
 . Windows'ta çalışması için runs-on kısmını yazdım, steps kısmında adımları tek tek gösterdim ve .NET'in son sürümünde çalışması için de kod yazdım.
 
@@ -109,7 +108,7 @@ name: Kodları İndir
 
  ## dotnet --info çıktısı örneği ve yorumlama
   Bilgisyarımdaki .Net ortamını kontrol etmek için terminale bu kodu yazdım ve şu çıktıyı aldım:
-  
+
  PS C:\Users\seyma> dotnet --info
 .NET SDK:
  Version:   7.0.403
@@ -126,29 +125,32 @@ Host:
   Version:      7.0.13
   Architecture: x64
   Commit:       3f73a2f186
-  
 
+  
  ## SENKRON VE ASENKRON PROGRAMLAMA
 
   **Senkronda** Her işlem sırayla yapılır bir iş bitmeden diğerine geçilemez.Basit uygulamalarda kullanılır.
- 
-public string KullaniciGetir()
 
-   {
-    Thread.Sleep(3000);  
-    return "Kullanıcı bilgisi"; 
-   }
+```csharp
+public string KullaniciyiGetir()
+{
+Thread.Sleep(3000);
+return "Kullanıcı bilgisi";
+}
+```
 
   *kullanıcı bilgileri alınırken 3 saniye bekletir.Bekleme bitene kadar işlem yapılmaz.
 
 **Asenkron** da ise tam tersi beklerken başka işlerde yapılabilir.Web API, veri çekme işlemleri yapılır.
 
+```csharp
 public async Task<string> KullaniciGetirAsync()
+{
+    await Task.Delay(3000);
+    return "Kullanıcı bilgisi";
+}
+```
 
-  {
-    await Task.Delay(3000); 
-    return "Kullanıcı bilgisi";  
-  }
   
     *bekleme olurken programın diğer işleri devam eder.Kullanıcı deneyimi çok daha yüksektir.
 
@@ -160,9 +162,11 @@ public async Task<string> KullaniciGetirAsync()
   
  ## C# Arrow Function
   Bu ifade lambda fonksiyonu olarak geçer. Derste hocamız kodları kısaltmak daha hızlı kısa kod olarak açıklamıştı lambda fonksiyonu.
-  
-  List<int> sayilar = new List<int> { 1, 2, 3, 4, 5 };
-  var çiftSayilar = sayilar.Where(sayi => sayi % 2 == 0).ToList();
+
+```csharp
+List<int> sayilar = new List<int> { 1, 2, 3, 4, 5 };
+var ciftSayilar = sayilar.Where(sayi => sayi % 2 == 0).ToList();
+```
   
     *sayı çift mi? diye sorgulayan kısa bir fonksiyon var burda da.
 
@@ -192,42 +196,48 @@ public async Task<string> KullaniciGetirAsync()
 - **Metodlar**
   
   .Get:Veri almak için kullanılır.
-  
+
+```csharp
 [HttpGet]
 public List<Ogrenci> TumOgrencileriGetir()
 {
     return ogrenciServisi.HepsiniGetir();
 }
+```
 
   .Post:Yeni veri eklemek için.
 
-  [HttpPost]
+```csharp
+[HttpPost]
 public IActionResult YeniOgrenciEkle([FromBody] Ogrenci yeniOgrenci)
 {
     ogrenciServisi.Ekle(yeniOgrenci);
     return Ok();
 }
+```
 
 
   .Put:Var olan veriyi tamamen güncellemek için kullanılır.
 
+```csharp
 [HttpPut("{id}")]
 public IActionResult Guncelle(int id, [FromBody] Ogrenci guncelOgrenci)
 {
     ogrenciServisi.Guncelle(id, guncelOgrenci);
     return Ok();
 }
-
+```
 
   .Delete:Veri silmek için kullanılır.
-      
+
+ ```csharp
 [HttpDelete("{id}")]
-public IActionResult Sil(int id)
+public ActionResult Sil(int id)
 {
     ogrenciServisi.Sil(id);
     return Ok();
 }
-
+```
  
 
 ## RESTful Servislerin Çalışma Mantığı
@@ -259,24 +269,28 @@ JSON, veriyi taşımak ve saklamak için kullanılan bir formattır. Eskiden XML
 **Örnek JSON**:
  Kullanıcı giriş yaparken bu bilgileri girer ve bu bilgiler API'ye gönderilir.Gönderilen JSON ise budur:
 
-   {
+```json
+{
   "email": "aylin@gmail.com",
   "sifre": "Aylin1234!"
 }
+```
 
  Sunucu json'u alır ve düşünür böyle bir kullanıcı var mı şifresi doğru mu diye.Eğer doğruysa şu şeklde bir JSON ile cevap gönderilir:
 
+```json
 {
   "mesaj": "Giriş başarılı",
   "kullaniciAdi": "Aylin",
   "token": "ab123abc456xyz789",  
   "sonGiris": "2025-08-08"
 }
+```
 
   **Ayrıca sunucu giriş başarılı olduğunda kullanıcıya özel bir token verir.Dijital anahtar,id gibi düşünebiliriz aslında.Yani token saklanır ve tekrar giriş yapmana gerek kalmaz çünkü o id ile seni tanır.
   
 
-# ASP.NET
+# 4.ASP.NET
 
 ## ASP.NET ve ASP.NET core nedir?Avantajları Farkları 
 
@@ -321,6 +335,7 @@ Yani kullanıcı bir sayfaya gitmek istediğinde bu istek, sunucuya ulaşmadan �
 
 **Program.cs içinde middleware örneği**
 
+```csharp
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
    app.UseExceptionHandler("/Home/Error");  (Mesela sistem patladı diyelim. Kodu yazan geliştirici bir yerde hata yaptı. İşte kullanıcıya siyah ekran vermeyelim diye onu şık bir Bir sorun oluştu sayfasına yönlendiriyoruz.)
@@ -340,7 +355,7 @@ var app = builder.Build();
     pattern: "{controller=Home}/{action=Index}/{id?}");  (En sonunda artık her şey hazır. Kullanıcının istediği sayfa çalıştırılıyor. Mesela anasayfa mı istiyor O zaman HomeController içindeki Index çalışıyor.)
 
 app.Run();   (Uygulama çalışıyor.)
-
+```
    
 ## Dependency Injection(DI) nedir? neden önemlidir?
    Bir sınıfın ihtiyacı olan başka sınıfları kendi içinde oluşturmak yerine dışarıdan almasıdır.Diyelim ki bir kahve makinesine süt ve kahve gerekiyo makine kendi alıyosa sıkıntı ama biri gelip koyuyosa bu dependency ınjection oluyor.Çünkü makine sadece kahveyi yapar.
@@ -348,7 +363,8 @@ app.Run();   (Uygulama çalışıyor.)
   **DI Örnek**:
 
 - Burada sadece bir iş yapılıyor o da mesajı hazırlamak.
-  
+
+```csharp
 public class SelamServisi
 {
     public string MesajHazirla()
@@ -356,9 +372,11 @@ public class SelamServisi
         return "Merhaba, iyi günler!";
     }
 }
+```
 
   -Selamci sınıfı mesajı hazırlamıyor sadece dışardan aldığı Selamservisi sınıfını kullanıyor.Yani selamci sadece mesajı nasıl göndericeğini biliyor mesajın içeriği hakkında bilgisi yok.Yani kendi işine odaklanıyor,bağımlı değil DI'da burda devreye giriyor.
-  
+
+```csharp
 public class Selamci
 {
     private SelamServisi _servis; 
@@ -374,9 +392,12 @@ public class Selamci
         Console.WriteLine(mesaj);
     }
 }
+```
+
 
 -Burada ilk olarak bir SelamServisi nesnesi oluşturuyoruz.Sonra bunu Selamci sınıfına constructer ile veriyoruz(new metodu ile).En son SelamVer() metodunu çağırıp mesajı basmış oluyoruz.
 
+```csharp
 class Program
 {
     static void Main(string[] args)
@@ -387,6 +408,7 @@ class Program
         selamci.SelamVer(); 
     }
 }
+```
 
    
  
@@ -501,7 +523,7 @@ class Program
     
 
 # 5. VERİTABANI VE ORM
-    SQL, ilişkisel veritabanıyla iletişim kurmak için kullanılan dildir.Veri silmeye,güncellemeye,silmeye yarar.
+  SQL dediğimiz şey, ilişkisel veritabanıyla konuşmamızı sağlayan bir dil. Yani veri eklemek, silmek, güncellemek, aramak gibi işlerimizi bu dil sayesinde yapıyoruz. Normalde veritabanına tek tek komut yazarak ulaşabiliriz ama işin içine ORM girince işler kolaylaşıyor.
 
 ## İlişkisel vs İlişkisel Olmayan Veritabanları
     
@@ -515,18 +537,51 @@ class Program
 
 
 ## ORM Nedir?
-    SQL yazmadan c# gibi dillerle veritabanı işlemleri yapmayı sağlar.Entity Framework Core gibi.
+  ORM (Object Relational Mapping), veritabanına SQL yazmadan, C#, Java, Python gibi dillerle işlem yapmamızı sağlıyor.
+Ben mesela Entity Framework Core kullanarak, SQL sorgusu yazmadan db.Products.Add() diyerek veri ekleyebiliyorum. Bu sayede hem kod okunaklı oluyor hem de SQL hatası yapma ihtimalim azalıyor.
+
 
 ## DbContext Nedir?
-    EF Core'un kalbidir.Veritabanındaki tabloları temsil eder ve veriye erişim sağlar.
-    **bu kod veritabanı ile konuşabilmek için köprü görevi görüyor.Products adında yablo oluşturuyoruz daha önce product sınıfını yazdıysak bu tablo onun özlleriklerine göre oluşturulcak.
-    
-    public class AppDbContext : DbContext
+  Entity Framework Core’un kalbi diyebilirim. Veritabanındaki tabloları temsil ediyor ve onlarla konuşmamızı sağlıyor.
+Bunu bir köprü gibi düşünebilirz: Kod tarafındaki sınıflarımız ile veritabanındaki tabloları birbirine bağlıyor.
+
+
+```csharp
+public class OkulDbContext : DbContext
 {
-    public DbSet<Product> Products { get; set; }
+    public DbSet<Ogrenci> Ogrenciler { get; set; }
+    public DbSet<Ders> Dersler { get; set; }
 }
+
+public class Ogrenci
+{
+    public int Id { get; set; }
+    public string Ad { get; set; }
+    public string Soyad { get; set; }
+    public int Yas { get; set; }
+}
+
+public class Ders
+{
+    public int Id { get; set; }
+    public string DersAdi { get; set; }
+    public int Kredi { get; set; }
+}
+```
+
+
+    *OkulDbContext bizim veritabanıyla konuştuğumuz yer.
+    *Ögrenciler tablosu ve Dersler tablosu otomatik oluşuyor.
+    *Ögrenci sınıfındaki her özellik (Ad, Soyad, Yas) veritabanında sütun olarak yer alıyor.
+    *Ders sınıfı da derslerin bilgilerini tutuyor.
+
+
+
+   
 ## LINQ Nedir?
-    LINQ (Language Integrated Query), koleksiyonlar ve veritabanı üzerinde sorgu yazmayı kolaylaştırır.
+ LINQ (Language Integrated Query) dediğimiz şey, hem koleksiyonlarda (listeler, diziler vs.) hem de veritabanında sorgu yazmayı kolaylaştıran bir özellik.
+SQL komutları yazmak yerine C# içinde direkt nokta (.) ile sorgu yazabiliyoruz. Kod daha okunaklı oluyor, hem de tek bir dil üzerinden gidiyoruz.
+
     
 | LINQ İfadesi (C#)                          | SQL Karşılığı                           |
 | ------------------------------------------ | --------------------------------------- |
@@ -546,26 +601,41 @@ class Program
 | Araçlar       | Migration        | Scaffold-DbContext                |
 
 
+ .Code-First’te önce kodu yazıyorsun, sonra veritabanı o koda göre oluşuyor.
+ .Database-First’te ise zaten hazır bir veritabanın var, kodu ona göre üretiyorsun.
+ .Ben yeni projelerde genelde Code-First kullanırım, çünkü esnek.
+
+
 ## 4 Temel SQL Sorgusu Örneği
- *Select: select * from Products; (verileri listeler)
- *Insert: ınsert into Products (Name, Price) values ('Muz', 10);(name:muz;price:10)
- *Update: update Products SET Price = 15 where Name = 'Muz';(muzun fiyatını 15 olarak günceller)
- *Delete: delete from Products where Name = 'Muz';(ismi muz olan verileri siler)
+ **Select**: SELECT * FROM Ogrenciler; (Öğrenciler tablosunu listeler.Yani verileri göstermeye yarar.)
+ 
+ **Insert**: INSERT INTO Ogrenciler (Ad, Soyad, Yas) VALUES ('Ayşe', 'Yılmaz', 21); (Ayşe yılmaz adında 21 yaşında bir öğrenciyi öğrenciler tablosuna eklemeye yarar.)
+ 
+ **Update**: UPDATE Ogrenciler SET Yas = 22 WHERE Ad = 'Ayşe' AND Soyad = 'Yılmaz'; (Ayşe yılmaz'ın yaşını 22 olarak günceller.)
+ 
+ **Delete**: DELETE FROM Ogrenciler WHERE Ad = 'Ayşe' AND Soyad = 'Yılmaz'; (Ayşe Yılmaz adındaki öğrenciyi tablodan kaldırır.)
 
 
-# GÜVENLİK VE PERFORMANS
+# 6.GÜVENLİK VE PERFORMANS
 
   ## Authentication vs Authorization
-   Giriş yaptıysan authenticated olursun.(Kimsin sorusunun cevabı)
-   Admin paneline erişebiliyorsan authorized olursun.(Neye erişebilirsin)
+**Authentication (Kimlik Doğrulama)**: “Sen kimsin?” sorusunun cevabı.
+Giriş yaptıysan authenticated oluyorsun. Yani sistem seni tanıyor.
+  Örnek: Kullanıcı adı ve şifreyle giriş yaptığında “Evet, bu kişi Hakan” diye onaylanmak.
+
+**Authorization (Yetkilendirme)**: “Nereye girebilirsin, ne yapabilirsin?” sorusunun cevabı.
+Sisteme giriş yaptıktan sonra, admin paneline erişebiliyorsan authorized oluyorsun.
+  Örnek: Normal kullanıcı sisteme girer ama admin panelini göremez; admin görebilir.
 
   ## JWT (JSON Web Token) Nedir?
-    JWT, kullanıcı giriş yaptığında oluşturulan ve sunucu ile istemci arasında kimlik bilgisini taşımaya yarayan şifrelenmiş token’dır.
+  JWT’yi ilk öğrendiğimde kafamda direkt “dijital giriş bileti” gibi canlandı. Kullanıcı sisteme giriş yaptığında sunucu sana bir token veriyor. Bu token şifrelenmiş ve güvenli bir şekilde kimliğini taşıyor.
+  
     3 parçadan oluşur:
-    -Header:Algoritma ve token tipi 
-    -Payload:Kullanıcı bilgileri,id gibi
-    -Signature:Gizli Anahtarlarla imzalanmış kısım
-     Token, HTTP isteklerinde Authorization: Bearer token şeklinde gönderilir.
+    -Header: Hangi algoritma ve token tipi kullanılacak, bu kısımda yazıyor.
+    -Payload: Kullanıcıya ait bilgiler, mesela ID ya da kullanıcı adı.
+    -Signature: Gizli anahtarla imzalanmış bölüm, bu sayede token’ın sahte olup olmadığı anlaşılabiliyor.
+
+     Bana göre JWT’nin olayı şu: Parola her istekte tekrar gönderilmiyor, onun yerine bu “giriş bileti” kullanılıyor. Böylece hem güvenlik hem de hız açısından avantaj sağlanıyor.
      
   ## OAuth, OAuth2.0, OpenID, OpenIddict Nedir?
    
@@ -575,30 +645,38 @@ class Program
 | **OAuth2.0**   | OAuth’un gelişmiş sürümü, günümüzde yaygın                                    |
 | **OpenID**     | Kimlik doğrulama sağlar ("bu kullanıcı kim?")                                 |
 | **OpenIddict** | ASP.NET Core’da OpenID destekli kimlik doğrulama ve yetkilendirme kütüphanesi |
+
+
    -kısaca-
-   OpenID Authentication sağlar.
-   OAuth Authorization sağlar.
+   -OpenID Authentication sağlar.
+   -OAuth Authorization sağlar.
 
 ## Performans Artırma Teknikleri 
+  Performans konusu bence hem kullanıcı deneyimi hem de sistemin sağlığı için kritik. Ben araştırırken özellikle Entity Framework’te yapılabilecek birkaç yöntemi not aldım:
   
-    **AsNoTracking()
-    Entity Framework’te sorgularda takip kapatılır.
-    Performans artar çünkü EF değişiklikleri izlemez.
+**AsNoTracking()**:
+ Normalde EF, sorgudan gelen verileri takip ediyor ki ileride değiştirirsen kaydedebiliriz. Ama sadece veri görüntüleyeceksek bu gereksiz.
+AsNoTracking() kullanınca bu takip kapanıyor, performans artıyor.
 
-    **IAsyncEnumerable
-    Await foreach ile veri parça parça çekilir.
-    Bellek dostu, özellikle büyük veri setlerinde işe yarar.
+**IAsyncEnumerable**:
+ Bu özellik sayesinde veriler “parça parça” çekiliyor. Yani hepsini bir anda belleğe yüklemiyoruz.
+Büyük veri setlerinde özellikle bellek tasarrufu sağlıyor.
+Await foreach ile kullanılıyor, veri geldikçe işlem yapabiliyorsun.
 
-    **Caching (Önbellekleme)
-    Sık kullanılan veriler bellekte tutulur.
-    Gereksiz veritabanı sorguları engellenir.
+**Caching (Önbellekleme)**:
+ Sık kullanılan verileri bellekte saklıyoruz. Böylece her seferinde veritabanına gitmeye gerek kalmıyor.
+Bu, hem sorgu sayısını hem de yükü ciddi anlamda azaltıyor.
+Mesela anasayfadaki kategori listesi sürekli değişmiyorsa cache’e almak mantıklı.
 
-    **Profiling
-    Uygulamadaki yavaş noktalar analiz edilir.
-    MiniProfiler gibi araçlarla yavaş sorgular bulunur.
+**Profiling**:
+ Uygulamanın nerede yavaşladığını bulmak için kullanılıyor.
+MiniProfiler gibi araçlar, hangi sorguların uzun sürdüğünü ve hangi sayfanın ağır çalıştığını gösteriyor.
+Geliştirme sırasında çok işe yarıyor çünkü sorunları anında tespit edebiliyoruz.
 
 ## OWASP Top 10
-  OWASP (Open Web Application Security Project), web uygulamalarında en yaygın güvenlik açıklarını sıralayan küresel bir projedir.
+OWASP (Open Web Application Security Project) aslında dünya çapında bir topluluk.
+Bunlar web uygulamalarında en sık görülen güvenlik açıklarını listeleyip geliştiricilerin dikkat etmesi gereken konuları belirtiyorlar.
+En popüler listesi “OWASP Top 10” olarak geçiyor.
 
 
 | #  | Açık Adı                               | Kısa Açıklama                                                                                           |
@@ -617,40 +695,44 @@ class Program
 
 ## ASP.NET Core ile Alınabilecek Güvenlik Önlemleri
 
-    **SQL Injection'a karşı koruma:Entity Framework Core kullanarak parametreli sorgular yapılır.
-      FromQuery, FromBody gibi binding işleminden sonra ModelState.IsValid ile doğrulama yapılır.
+**SQL Injection'a karşı koruma:** SQL Injection, veritabanına zararlı kod enjekte etme olayı.
+Bunu önlemenin en kolay yolu, Entity Framework Core ile parametreli sorgular kullanmak.
+Yani kullanıcıdan gelen veriyi doğrudan SQL’e yapıştırmak büyük risk oluşturur.
 
-    **XSS(Cross-Site Scripting) saldırılarına karşı:Kullanıcının gönderdiği HTML veya script kodlarının çalıştırılmaması gerekiyor.
-     Razor sayfaları HTML içerikleri otomatik olarak encode eder.
-     Eğer veriyi JavaScript içinde kullanıyorsak, HtmlEncoder.Default.Encode() gibi güvenli kodlama yapılmalı.
+**XSS(Cross-Site Scripting) saldırılarına karşı:** XSS dediğimiz olay, kullanıcıya zararlı JavaScript kodu çalıştırmak.
+Razor sayfaları bu konuda güzel, çünkü gelen veriyi otomatik encode ediyor, yani HTML olarak çalıştırmıyor.
+Ama JavaScript içinde kullanıcıdan gelen bir veri kullanacaksam, ekstra olarak HtmlEncoder.Default.Encode() ile güvenli hale getirmem gerektiğini öğrendim.
+Bunu da “Kullanıcıdan gelen veri, dokunmadan tarayıcıya dönmez” diye aklıma yazdım.
      
-    **CSRF (Cross Site Request Forgery) Önlemi:Kullanıcının haberi olmadan sistemde işlem yapılmasını engellemek için:
-      Formlara otomatik gelen @Html.AntiForgeryToken() kullanılmalı.
-      [ValidateAntiForgeryToken] attribute'u POST isteklerinde kontrol sağlar.
+**CSRF (Cross Site Request Forgery) Önlemi:** Bu saldırı türünde kullanıcı farkında olmadan sistemde işlem yapıyor.
+ASP.NET Core burada da kolaylık sağlıyor:
+Formlarda otomatik gelen @Html.AntiForgeryToken() koruma sağlıyor.
+POST isteklerinde [ValidateAntiForgeryToken] attribute’u eklemek gerekiyor.
+Kendi kendime “Token’sız POST olmaz” diye not aldım.
 
-    **  Kimlik Doğrulama ve Yetkilendirme (Broken Auth)
-      Kullanıcının kimliği iyi doğrulanmalı ve sadece yetkili alanlara erişebilmesi sağlanmalı.
-      ASP.NET Identity ile giriş/çıkış işlemleri yapılmalı.
-      Şifre politikası uygulanmalı (örneğin en az 6 karakter, büyük harf, özel karakter vs.).
-      Eğer JWT token kullanıyorsak, token süresi belirlenmeli (expires) ve zamanında yenilenmeli.
+**Kimlik Doğrulama ve Yetkilendirme (Broken Auth)**: Kullanıcı kimliği doğru doğrulanmalı ve sadece yetkili olduğu alanlara erişebilmeli.
+   ASP.NET Identity kullanmak güvenli bir yöntem.
+   Şifre politikası oluşturulmalı (mesela en az 6 karakter, büyük harf, özel karakter).
+   JWT token kullanılıyorsa süresi (expires) belirlenmeli ve zamanında yenilenmeli.
+Bunu da “Doğrula, yetkilendir, ama fazla kapı açma” diye kafama yazdım.
       
-    **Model Doğrulama (Validation):Kullanıcıdan gelen veriler önce model üzerinde kontrol edilmeli.
+**Model Doğrulama (Validation):** Kullanıcıdan gelen veriler önce model üzerinde kontrol edilmeli.Böylece hem saçma veriler hem de güvenlik açıkları sisteme girmez.
 
-    **Input Sanitization (Girdi Temizleme):Kullanıcıdan gelen içerikler (özellikle HTML) sunucuda mutlaka filtrelenmeli.
-      HTML içeriği gerekiyorsa, güvenli HTML parser veya HtmlSanitizer gibi kütüphaneler kullanılmalı.
-      Amaç: <script> gibi zararlı kodların çalışmasını engellemek.
+**Input Sanitization (Girdi Temizleme):** Eğer kullanıcıdan HTML alacaksam, direkt kaydetmek yok.
+Bunun için güvenli HTML parser ya da HtmlSanitizer gibi kütüphaneler kullanılmalı.
+Bunu da “<script> gördün mü, temizle!” diye kendime yazdım.
 
-# LOGGING VE HATA YÖNETİM
- Yazdığımız uygulamalar bazen hata verebilir, bazen de düzgün çalışıyor gibi görünse bile arka planda bir şeyler ters gidiyor olabilir. Bu yüzden uygulamamızın neler yaptığını kaydetmemiz (loglamamız) gerekir.
+
+# 7.LOGGING VE HATA YÖNETİM
+ Ben bu konuyu araştırırken fark ettim ki loglama, yazdığımız uygulamanın geçmişini tutmak gibi bir şey. Yani uygulama aslında kendi günlüğünü yazıyor.
+İlk başta her şeyi mi kaydediyoruz diye düşündüm ama öğrendim ki hayır, her şey loglanmaz; önem derecesine göre seviyeler var.
        
-   **Neden Loglama Yapılır?**
-     Uygulamanın geçmişte ne yaptığını izlemek için
-     Hata olduğunda neden olduğunu bulmak için
-     Canlı sistemde sorunları hızlıca teşhis edebilmek için
-     Kullanıcının yaptığı işlemleri kayıt altına almak için
-         Yani loglar, uygulamanın "günlük tutması" gibi bir nevi o zaman.
+**Neden Loglama Yapılır?**
+  -Uygulamanın geçmişte ne yaptığını izlemek için
+  -Hata olduğunda neden olduğunu bulmak için
+  -Canlı sistemde sorunları hızlıca teşhis edebilmek için
+  -Kullanıcının yaptığı işlemleri kayıt altına almak için
          
-      Her şey loglanmaz,önem derecesine göre seviyeler vardır:
         
 | Seviye          | Açıklama                                                                  |
 | --------------- | ------------------------------------------------------------------------- |
@@ -662,148 +744,199 @@ class Program
 | **Critical**    | Ciddi hata. Sistem çalışamayabilir.                                       |
 
       
-# ASP.NET Core'da Logging Nasıl Yapılır?
-  ASP.NET Core, built-in (dahili) bir logging mekanizması sunar.dışardan özel bir şey eklemeden bile log tutmaya başlayabiliriz.
-  Bu altyapı sayesinde:
-  Hangi olay ne zaman olmuş öğrenebiliriz.
-  Hangi metod çalışmış, hangi hatalar alınmış görebiliriz.
-  Geliştiriciler olarak uygulamayı izleyebilir, hata ayıklayabilir ve sorunları tespit edebiliriz.
+## ASP.NET Core'da Logging Nasıl Yapılır?
+  Ben bu konuyu araştırırken şunu fark ettim: ASP.NET Core zaten içinde hazır bir logging (log tutma) sistemiyle geliyor. Yani dışarıdan ekstra bir kütüphane eklemeden bile log tutmaya başlayabiliyoruz.
+  
+Bu altyapı sayesinde:
+-Hangi olay ne zaman olmuş öğrenebiliriz.
+-Hangi metod çalışmış, hangi hatalar alınmış görebiliriz.
+-Geliştiriciler olarak uygulamayı izleyebilir, hata ayıklayabilir ve sorunları tespit edebiliriz.
 
-# Global Exception Handling
- Tüm hataları yakalamaktır.Bazen bir sayfa patladığında sunucu hatası verir ama detay yoktur.ASP.NET core bize bu hataları kontrol etme imkanı sunar.
+## Global Exception Handling
+ Bazı durumlarda uygulama patlayabiliyor ve kullanıcıya sadece “500 Server Error” gibi çirkin bir mesaj çıkıyor. Burada Global Exception Handling devreye giriyor.
+Amacı: Tüm hataları yakalamak ve kullanıcıya daha düzgün, özel bir hata sayfası göstermek.
 
- # UseExceptionHandler ve ILogger nasıl kullanılır?
+ ## UseExceptionHandler ve ILogger nasıl kullanılır?
 
-**UseExceptionHandler:Sistemde bir hata olursa,
+**UseExceptionHandler:** Sistemde bir hata olursa,
 Kullanıcıya çirkin sistem hatası gösterilmez,
 Onun yerine kullanıcı özel bir hata sayfasına yönlendirilir.
-   if (!app.Environment.IsDevelopment())
+
+```csharp
+if (!uygulama.Ortam.GelistirmeModu())
 {
-    app.UseExceptionHandler("/Home/Error");
+    uygulama.HataYakalayici("/AnaSayfa/Hata");
 }
-  *Error adında bir sayfa varsa tüm hatalarda o sayfa gösterilicek demektir.
+```
+
+
+    *Error adında bir sayfa varsa tüm hatalarda o sayfa gösterilicek demektir.
  
- **ILogger:  Bu da uygulamanın log (kayıt) tutma işini yapar. Hangi controller ne zaman çalıştı, hangi işlem ne hata verdi gibi bilgileri yazdırır. 
-    
-    public class HomeController : Controller
+ **ILogger:**  Bu da uygulamanın log (kayıt) tutma işini yapar. Hangi controller ne zaman çalıştı, hangi işlem ne hata verdi gibi bilgileri yazdırır. 
+ 
+  '''csharp
+    public class AnaSayfaDenetleyici : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly IGunlukKayitlayici<AnaSayfaDenetleyici> _gunluk;
 
-    public HomeController(ILogger<HomeController> logger)
+    public AnaSayfaDenetleyici(IGunlukKayitlayici<AnaSayfaDenetleyici> gunluk)
     {
-        _logger = logger;
+        _gunluk = gunluk;
     }
 
-    public IActionResult Index()
+    public IActionResult AnaSayfa()
     {
-        _logger.LogInformation("Anasayfa yüklendi.");
+        _gunluk.BilgiKaydet("Ana sayfa yüklendi.");
         return View();
     }
 
-    public IActionResult Error()
+    public IActionResult Hata()
     {
-        _logger.LogError("Bir hata oluştu.");
+        _gunluk.HataKaydet("Bir hata oluştu.");
         return View();
     }
 }
-   *ILogger<T> ile özel sınıfa alınır. 
-   LogInformation() ile bilgi yazılır.(örneğin kullanıcı giriş yaptı)
-   LogError() ile hata loglanır.
+'''
 
-# Örnek Hata Yönetim kodu 
- ASP.NET Core’da bir işlem sırasında hata oluşursa, bu hatayı kullanıcıya pat diye göstermek yerine yakalamak ve loglamak isteriz. Bunun için try-catch bloğu ve ILogger kullanırız.
-   
-   public IActionResult Details(int id)
+-IGunlukKayitlayici<T>: Belirli bir sınıf için log kaydı tutar.
+-BilgiKaydet(): Bilgi mesajı yazar (Ana sayfa yüklendi.)
+-HataKaydet(): Hata mesajı yazar (Bir hata oluştu.)
+
+
+### Örnek Hata Yönetim kodu 
+ ASP.NET Core’da bir işlem sırasında hata olursa, bunu kullanıcıya çirkin bir hata mesajı olarak göstermek yerine yakalayıp loglamak isteriz. Bunun için try-catch bloğu ve ILogger kullanılır.
+ 
+```csharp
+public IActionResult Detay(int id)
 {
     try
     {
-        var product = _db.Products.Find(id);
-        return View(product);
+        var urun = _db.Products.Find(id);
+        return View(urun);
     }
     catch (Exception ex)
     {
         _logger.LogError(ex, "Ürün detayları alınırken hata oluştu.");
-        return View("Error");
+        return View("Hata");
     }
 }
+```
+
+
   * try bloğuna hata oluşabilcek kod yazılır.
   * catch bloğu hata olursa çalışıcak yerdir.
   * _logger.LogError kısmı ise hatayı kayıt altına alır.
-  * return view("Error") burda hata sayfası gösterilir böylece sistem çökmemiş olur.
+  * return view("Hata") burda hata sayfası gösterilir böylece sistem çökmemiş olur.
 
  
- # YAZILIM GELİŞTİRME PRENSİPLERİ
+# 8.YAZILIM GELİŞTİRME PRENSİPLERİ
 
 ## SOLID Prensipleri
+ Bu konuyu araştırırken fark ettim ki SOLID prensipleri aslında yazılımın sağlam, esnek ve kolay değiştirilebilir olması için oluşturulmuş kurallar.
+ 
+**Single Responsibility(tek sorumluluk)**
+ Bir sınıf sadece tek bir iş yapmalı.
+Eğer sınıfın içinde hem veri tabanı işlemi hem yazdırma hem de hesaplama varsa bu prensip bozulmuş oluyor.
 
-* Single Responsibility(tek sorumluluk)
-  Bir sınıfın yalnızca tek işi olmalı.
-  
-    public class InvoicePrinter {
-    public void Print(Invoice invoice) {
-      
+```csharp
+public class FaturaYazdirici
+{
+    public void Yazdir(Fatura fatura)
+    {
     }
 }
-     - Tek işi yazdırmak
+```  
 
-* Open/Closed
-  Kod genişletilmeye açık ama değiştirilmeye kapalı olmalı.
+   -Sadece yazdırma işi yapar.
   
-    public interface IDiscount {
-    double Apply(double price);
-}
-public class StudentDiscount : IDiscount {
-    public double Apply(double price) => price * 0.9;
-}
-     - Kod değiştirilmeden yeni sınıflar yazarak genişletilme yapılabilir.
+**Open/Closed**
+ Kod genişletmeye açık, değiştirmeye kapalı olmalı.
+Yani yeni özellik eklemek için eski kodu bozmak zorunda kalmamalıyız.
 
-* Liskov Substitution
+```csharp
+public interface Indirim
+{
+    double Uygula(double fiyat);
+}
+
+public class OgrenciIndirimi : Indirim
+{
+    public double Uygula(double fiyat) => fiyat * 0.9;
+}
+```  
+    
+    - Burada yeni bir indirim eklemek istersem sadece yeni bir sınıf yazarım, mevcut kodu değiştirmem.
+
+**Liskov Substitution**
   Türeyen sınıflar, ana sınıfın yerine geçebilmeli.
   -Kuş sınıfı varsa, Güvercin:Kuş sınıfı da aynı şekilde davranabilmeli.
 
-* Interface Segregation
-  Kullanılmayan metodları içeren dolu arayüzleri kullanılmamalı.
+**Interface Segregation**
+  Kullanmayacağımız metodlarla dolu büyük arayüzler yerine, küçük ve amaca yönelik arayüzler kullanılmalı.
   
-  public interface IPrintable {
-    void Print();
+```csharp
+public interface Yazdirilabilir
+{
+    void Yazdir();
 }
-      - Interface'ler sayesinde farklı sınıflara aynı davranışı kazandırabiliyoruz.IPrintable gibi arayüzler, kodun daha esnek ve genişletilebilir olmasını sağlıyor.
+```  
+
+    - Interface'ler sayesinde farklı sınıflara aynı davranışı kazandırabiliyoruz.Yazdirilabilir gibi arayüzler, kodun daha esnek ve genişletilebilir olmasını sağlıyor.
 Gerçek dünyada “her yazdırılabilir nesne” bu interface’i kullanabilirmiş gibi düşünebiliriz.
 
-* Dependency Inversion
+**Dependency Inversion**
  Sınıflar,somut değil soyut şeylere bağlı olmalı.
+ 
+```csharp
+public interface MesajServisi
+{
+    void Gonder();
+}
 
-  public interface IMessageService {
-    void Send();
+public class EpostaServisi : MesajServisi
+{
+    public void Gonder()
+    {
+       E-posta gönderme islemi
+    }
 }
-public class EmailService : IMessageService {
-    public void Send() { /* e-posta gönder */ }
-}
-        - Uygulama somut sınıfa (EmailService) bağımlı olmamalı.
-          Soyutlama olan IMessageService'e bağımlı olmalı.
-          Başta interface neden var diyordum.Ama sonra fark ettim ki, bu yapı sayesinde e-posta mı gönderiyorum, SMS mi gönderiyorum diye kodu değiştirmeme gerek kalmıyor.Sistem sadece "mesaj gönder" diyor, nasıl gönderileceği detayını bilmiyor.
-          Bu da yazılımı daha sağlam ve genişletilebilir yapıyor.
+```  
+
+      - Uygulama somut sınıfa (EmailService) bağımlı olmamalı.
+      -  Soyutlama olan IMessageService'e bağımlı olmalı.
+      -  Başta interface neden var diyordum.Ama sonra fark ettim ki, bu yapı sayesinde e-posta mı gönderiyorum, SMS mi gönderiyorum diye kodu değiştirmeme gerek kalmıyor.Sistem sadece "mesaj gönder" diyor, nasıl gönderileceği detayını bilmiyor.
+       Bu da yazılımı daha sağlam ve genişletilebilir yapıyor.
 
 ## Design Patterns(Tasarım Kalıpları)
-* Singleton: Uygulama çalışırken tek bir tane nesne oluşturmak istediğimizde kullanılır.Yani sınıftan sadece 1 kez oluşturulabilir, herkes onu kullanır.
-  Neden Kullanılır?
-  Bellek tasarrufu sağlamak için.
-  Global erişim sağlamak için.
-  Loglama (Logger), Ayarlar (Config), Veritabanı bağlantısı gibi yerlerde çok kullanılır.
 
-* Repository:Veritabanı işlemlerini servis katmanından ayırmak için kullanılan bir kalıptır.Kodun "veriyi nasıl çektiğini" gizler, sadece ne yapılmak istendiğini açıklar.
-  Neden Kullanılır?
-  Kodun okunabilirliği ve test edilebilirliği artar.
-  Veritabanı ile iş yapan sınıfları soyutlamak kolaylaşır.
-  İş mantığı (business logic) ile veritabanı kodu birbirine karışmaz.
+**Singleton:** program çalışırken aynı sınıftan sadece tek bir tane nesne oluyor. Mesela log tutmak için her seferinde yeni nesne oluşturmak yerine bir tane yapıyorsun, herkes onu kullanıyor. Hem hafızayı boşuna doldurmuyorsun hem de işler daha düzenli oluyor.
+
+  -Neden Kullanılır?
+  .Bellek tasarrufu sağlamak için.
+  .Global erişim sağlamak için.
+  .Loglama (Logger), Ayarlar (Config), Veritabanı bağlantısı gibi yerlerde çok kullanılır.
+
+**Repository:** Aslında veritabanıyla uğraşırken iş mantığını ve veri çekme işlemlerini birbirinden ayırıyor. Yani “hangi veriyi nasıl çekeceğim” kısmını gizleyip sadece “ne yapacağım” kısmını yazıyorsun. Kod daha düzenli oluyor, test etmek de kolaylaşıyor.
+
+  -Neden Kullanılır?
+  .Kodun okunabilirliği ve test edilebilirliği artar.
+  .Veritabanı ile iş yapan sınıfları soyutlamak kolaylaşır.
+  .İş mantığı (business logic) ile veritabanı kodu birbirine karışmaz.
 
 ## Clean Code(Temiz kod) Nedir?
- Kolay okunan, sade, anlaşılır ve bakımı kolay koddur. Anlamlı isimler, kısa fonksiyonlar, yorum gerektirmeyen kod = Temiz koddur.
-  Kötü Kod:
-   if (x == 1) { Birşeyolsun(); }
-  Temiz Kod:
-   if (Kullanıcıgirişyaptıysa) { ShowDashboard(); }
+ Kısaca kodun karışık olmaması, okununca hemen anlaşılması lazım. Mesela değişken isimleri saçma sapan olursa kimse anlamaz, ama anlamlı isim verince hem sen hem başkası rahat ediyor.
 
+```csharp
+const int GecmeNotu = 50;
+
+if (puan > GecmeNotu)
+{
+Console.WriteLine("Geçti");
+}
+```
+
+
+  
 ## Yazılım Mimari Desenleri
 
 | Mimari                           | Kısaca Açıklama                             | Ne Zaman Kullanılır?                       |
